@@ -20,10 +20,10 @@ st.set_page_config(
 )
 
 # --- OpenAI Setup ---
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # --- ElevenLabs Setup ---
-elevenlabs_client = ElevenLabs(api_key="sk_c3fda08735a26f68ab62bf5ef7c37aabb4699998df8156a6")
+elevenlabs_client = ElevenLabs(api_key=st.secrets["ELEVENLABS_API_KEY"])
 
 # --- Default Vacancy Data ---
 default_vacancy_text = """

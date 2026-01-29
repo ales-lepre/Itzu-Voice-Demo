@@ -10,7 +10,7 @@ st.set_page_config(
 )
 
 # --- OpenAI Setup ---
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # --- Helper Functions ---
 def generate_transcript():
