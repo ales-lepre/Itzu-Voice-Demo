@@ -4,13 +4,89 @@ import datetime
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="Candidate Suitability Analysis",
-    page_icon="📊",
+    page_title="itzu - Candidate Suitability Analysis",
+    page_icon="🦋",
     layout="wide"
 )
 
+# --- itzu Brand Colors ---
+ITZU_NAVY = "#2C3341"  # Darker navy matching the screenshot
+ITZU_GOLD = "#F5A623"
+ITZU_WHITE = "#FFFFFF"
+ITZU_LIGHT_BLUE = "#E8F4F8"
+
 # --- OpenAI Setup ---
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
+
+# --- Custom CSS for itzu Branding ---
+st.markdown(f"""
+<style>
+    /* Main background */
+    .stApp {{
+        background-color: {ITZU_NAVY};
+    }}
+
+    /* Main content text color */
+    .stApp p, .stApp span, .stApp label {{
+        color: {ITZU_WHITE};
+    }}
+
+    /* Headers */
+    h1, h2, h3 {{
+        color: {ITZU_GOLD} !important;
+    }}
+
+    /* Subheaders in main content */
+    .stMarkdown h2, .stMarkdown h3 {{
+        color: {ITZU_WHITE} !important;
+    }}
+
+    /* Primary buttons */
+    .stButton > button[kind="primary"] {{
+        background-color: {ITZU_GOLD} !important;
+        color: {ITZU_NAVY} !important;
+        border: none;
+        font-weight: bold;
+    }}
+
+    .stButton > button[kind="primary"]:hover {{
+        background-color: #E69500 !important;
+    }}
+
+    /* Download buttons */
+    .stDownloadButton > button {{
+        background-color: {ITZU_NAVY} !important;
+        color: {ITZU_WHITE} !important;
+    }}
+
+    .stDownloadButton > button:hover {{
+        background-color: #1f2b4d !important;
+    }}
+
+    /* Metrics */
+    [data-testid="stMetricValue"] {{
+        color: {ITZU_GOLD} !important;
+    }}
+
+    [data-testid="stMetricLabel"] {{
+        color: {ITZU_WHITE} !important;
+    }}
+
+    /* Text input areas */
+    .stTextArea textarea {{
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: {ITZU_WHITE} !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+
+    /* Info boxes */
+    .stAlert {{
+        background-color: rgba(245, 166, 35, 0.2) !important;
+        color: {ITZU_WHITE} !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+</style>
+""", unsafe_allow_html=True)
 
 # --- Helper Functions ---
 def generate_transcript():
@@ -102,8 +178,17 @@ Please provide a detailed analysis in the following format:
     return response.choices[0].message.content
 
 # --- Main Page UI ---
-st.title("📊 Candidate Suitability Analysis")
-st.markdown("---")
+# Header with itzu branding
+st.markdown(f"""
+<div style="background: linear-gradient(135deg, {ITZU_NAVY} 0%, #1f2b4d 100%); padding: 30px; border-radius: 10px; margin-bottom: 20px;">
+    <h1 style="color: {ITZU_WHITE}; margin: 0; text-align: center; font-size: 42px;">
+        itzu Suitability Analysis
+    </h1>
+    <p style="color: {ITZU_GOLD}; text-align: center; margin: 10px 0 0 0; font-size: 16px;">
+        AI-Powered Candidate Assessment
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # Check if interview data exists
 if 'messages' not in st.session_state or len(st.session_state.messages) <= 1:
@@ -147,22 +232,23 @@ else:
         st.markdown("---")
 
         # Report header
-        st.markdown("""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; margin: 20px 0;">
-            <h2 style="color: white; margin: 0; text-align: center;">📋 Candidate Suitability Report</h2>
-            <p style="color: white; margin: 5px 0; text-align: center; opacity: 0.9;">AI-Generated Analysis</p>
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, {ITZU_NAVY} 0%, #1f2b4d 100%); padding: 25px; border-radius: 10px; margin: 20px 0; border: 3px solid {ITZU_GOLD};">
+            <h2 style="color: {ITZU_WHITE}; margin: 0; text-align: center;">Candidate Suitability Report</h2>
+            <p style="color: {ITZU_GOLD}; margin: 5px 0; text-align: center; opacity: 0.9; font-weight: bold;">AI-Generated Analysis</p>
         </div>
         """, unsafe_allow_html=True)
 
         # Report content in a styled container
-        st.markdown("""
+        st.markdown(f"""
         <style>
-        .report-container {
-            background-color: #f8f9fa;
+        .report-container {{
+            background-color: rgba(255, 255, 255, 0.1);
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border-left: 5px solid {ITZU_GOLD};
+        }}
         </style>
         """, unsafe_allow_html=True)
 
@@ -206,6 +292,16 @@ else:
             transcript = generate_transcript()
             st.text_area("Transcript", value=transcript, height=400, disabled=True)
 
-# Footer
+# --- Footer ---
 st.markdown("---")
-st.caption("Powered by OpenAI GPT-4o | Emotional Analysis by GPT-4o-mini")
+st.markdown(f"""
+<div style="text-align: center; padding: 20px; background-color: rgba(255, 255, 255, 0.05); border-radius: 10px; margin-top: 30px; border: 1px solid {ITZU_GOLD};">
+    <p style="color: {ITZU_WHITE}; margin: 5px 0;">
+        Powered by <strong style="color: {ITZU_GOLD};">itzu</strong> |
+        OpenAI GPT-4o & Whisper | ElevenLabs TTS | Advanced Emotion Analysis
+    </p>
+    <p style="color: {ITZU_GOLD}; margin: 5px 0; font-size: 12px;">
+        © 2024 itzu - Transforming HR with AI
+    </p>
+</div>
+""", unsafe_allow_html=True)

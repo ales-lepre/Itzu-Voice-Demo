@@ -13,14 +13,20 @@ import librosa
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="AI HR Interview Assistant",
-    page_icon="🎤",
+    page_title="itzu - AI HR Interview Assistant",
+    page_icon="🦋",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
+# --- itzu Brand Colors ---
+ITZU_NAVY = "#2C3341"  # Darker navy matching the screenshot
+ITZU_GOLD = "#F5A623"
+ITZU_WHITE = "#FFFFFF"
+ITZU_LIGHT_BLUE = "#E8F4F8"
+
 # --- OpenAI Setup ---
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="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")
 
 # --- ElevenLabs Setup ---
 elevenlabs_client = ElevenLabs(api_key="sk_c3fda08735a26f68ab62bf5ef7c37aabb4699998df8156a6")
@@ -299,8 +305,122 @@ if not st.session_state.messages:
     st.session_state.messages.append({"role": "assistant", "content": initial_text, "audio": audio_base64})
     st.session_state.play_audio = True
 
+# --- Custom CSS for itzu Branding ---
+st.markdown(f"""
+<style>
+    /* Main background and text colors */
+    .stApp {{
+        background-color: {ITZU_NAVY};
+    }}
+
+    /* Main content text color */
+    .stApp p, .stApp span, .stApp label {{
+        color: {ITZU_WHITE};
+    }}
+
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {{
+        background-color: #1a1d26;
+        border-right: 2px solid {ITZU_GOLD};
+    }}
+
+    [data-testid="stSidebar"] * {{
+        color: {ITZU_WHITE} !important;
+    }}
+
+    /* Sidebar text areas */
+    [data-testid="stSidebar"] .stTextArea textarea {{
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: {ITZU_WHITE} !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+
+    /* Sidebar select boxes */
+    [data-testid="stSidebar"] .stSelectbox select {{
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: {ITZU_WHITE} !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+
+    /* Sidebar file uploader */
+    [data-testid="stSidebar"] .stFileUploader {{
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+
+    /* Headers */
+    h1, h2, h3 {{
+        color: {ITZU_GOLD} !important;
+    }}
+
+    /* Subheaders in main content */
+    .stMarkdown h2, .stMarkdown h3 {{
+        color: {ITZU_WHITE} !important;
+    }}
+
+    /* Primary buttons */
+    .stButton > button[kind="primary"] {{
+        background-color: {ITZU_GOLD} !important;
+        color: {ITZU_NAVY} !important;
+        border: none;
+        font-weight: bold;
+    }}
+
+    .stButton > button[kind="primary"]:hover {{
+        background-color: #E69500 !important;
+    }}
+
+    /* Toggle switch */
+    .stCheckbox > label {{
+        color: {ITZU_NAVY} !important;
+    }}
+
+    /* Chat messages */
+    [data-testid="stChatMessageContainer"] {{
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }}
+
+    /* Text input areas */
+    .stTextArea textarea, .stTextInput input {{
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: {ITZU_WHITE} !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+
+    /* Info boxes */
+    .stAlert {{
+        background-color: rgba(245, 166, 35, 0.2) !important;
+        color: {ITZU_WHITE} !important;
+        border: 1px solid {ITZU_GOLD} !important;
+    }}
+
+    /* Download buttons */
+    .stDownloadButton > button {{
+        background-color: {ITZU_NAVY} !important;
+        color: {ITZU_WHITE} !important;
+    }}
+
+    .stDownloadButton > button:hover {{
+        background-color: #1f2b4d !important;
+    }}
+</style>
+""", unsafe_allow_html=True)
+
 # --- Sidebar for Vacancy Input ---
 with st.sidebar:
+    # itzu Logo
+    col_logo = st.columns([1, 3, 1])
+    with col_logo[1]:
+        st.image("assets/image.png", use_container_width=True)
+
+    st.markdown(f"""
+    <div style="text-align: center; padding: 10px 0; background-color: {ITZU_NAVY};">
+        <p style="color: {ITZU_GOLD}; margin: 5px 0; font-size: 14px;">AI Interview Assistant</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("---")
     st.title("Job Vacancy Setup")
 
     # Language selector
@@ -368,7 +488,17 @@ with st.sidebar:
         st.info("Transcript will be available after the interview begins.")
 
 # --- Main Chat Interface ---
-st.title("AI HR Interview Assistant")
+# Header with itzu branding
+st.markdown(f"""
+<div style="background: linear-gradient(135deg, {ITZU_NAVY} 0%, #1f2b4d 100%); padding: 30px; border-radius: 10px; margin-bottom: 20px;">
+    <h1 style="color: {ITZU_WHITE}; margin: 0; text-align: center; font-size: 42px;">
+        itzu AI Interview Assistant
+    </h1>
+    <p style="color: {ITZU_GOLD}; text-align: center; margin: 10px 0 0 0; font-size: 16px;">
+        Powered by Advanced AI & Emotion Analysis
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # Mode toggle
 col_toggle1, col_toggle2 = st.columns([3, 1])
@@ -461,8 +591,7 @@ if st.session_state.conversation_mode:
                 emotion_context = f"\n\nNote: The candidate's emotional state during this response was detected as '{emotion}' with '{confidence}' confidence. Consider this in your assessment and follow-up questions."
 
                 # Prepare messages for API
-                language_instruction = f"IMPORTANT: Conduct the entire interview in {st.session_state.language}. All your responses must be in {st.session_state.language}."
-                system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\n{language_instruction}\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
+                system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
                 api_messages = [{"role": "system", "content": system_message}]
 
                 # Add conversation history
@@ -564,11 +693,11 @@ if not st.session_state.conversation_mode:
         color = confidence_colors.get(confidence, '#6c757d')  # Gray for unknown
 
         st.markdown(f"""
-        <div style="background-color: #e8f4f8; padding: 15px; border-radius: 10px; margin: 10px 0; border-left: 4px solid #0066cc;">
-            <h4 style="margin: 0 0 10px 0; color: #1a1a1a;">Emotional Analysis</h4>
-            <p style="margin: 5px 0; color: #2d2d2d;"><strong>Emotion:</strong> {emotion_data.get('emotion', 'Unknown')}</p>
-            <p style="margin: 5px 0; color: #2d2d2d;"><strong>Confidence Level:</strong> <span style="color: {color}; font-weight: bold;">{confidence}</span></p>
-            <p style="margin: 5px 0; font-style: italic; color: #4a4a4a;">{emotion_data.get('explanation', '')}</p>
+        <div style="background-color: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px; margin: 10px 0; border-left: 5px solid {ITZU_GOLD}; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            <h4 style="margin: 0 0 10px 0; color: {ITZU_GOLD};">Emotional Analysis</h4>
+            <p style="margin: 5px 0; color: {ITZU_WHITE};"><strong>Emotion:</strong> {emotion_data.get('emotion', 'Unknown')}</p>
+            <p style="margin: 5px 0; color: {ITZU_WHITE};"><strong>Confidence Level:</strong> <span style="color: {color}; font-weight: bold;">{confidence}</span></p>
+            <p style="margin: 5px 0; font-style: italic; color: {ITZU_WHITE}; opacity: 0.9;">{emotion_data.get('explanation', '')}</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -600,8 +729,7 @@ if not st.session_state.conversation_mode:
             st.session_state.current_emotion = None
 
             # Prepare messages for API
-            language_instruction = f"IMPORTANT: Conduct the entire interview in {st.session_state.language}. All your responses must be in {st.session_state.language}."
-            system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\n{language_instruction}\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
+            system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
 
             api_messages = [{"role": "system", "content": system_message}]
 
@@ -636,3 +764,17 @@ if not st.session_state.conversation_mode:
 else:
     # Conversation Mode: Show simple instruction
     st.info("💬 **Conversation Mode Active**: Just speak your response - it will be automatically processed and the AI will reply!")
+
+# --- Footer ---
+st.markdown("---")
+st.markdown(f"""
+<div style="text-align: center; padding: 20px; background-color: rgba(255, 255, 255, 0.05); border-radius: 10px; margin-top: 30px; border: 1px solid {ITZU_GOLD};">
+    <p style="color: {ITZU_WHITE}; margin: 5px 0;">
+        Powered by <strong style="color: {ITZU_GOLD};">itzu</strong> |
+        OpenAI GPT-4o & Whisper | ElevenLabs TTS | Advanced Emotion Analysis
+    </p>
+    <p style="color: {ITZU_GOLD}; margin: 5px 0; font-size: 12px;">
+        © 2024 itzu - Transforming HR with AI
+    </p>
+</div>
+""", unsafe_allow_html=True)
