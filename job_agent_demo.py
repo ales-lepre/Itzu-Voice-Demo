@@ -26,10 +26,10 @@ ITZU_WHITE = "#FFFFFF"
 ITZU_LIGHT_BLUE = "#E8F4F8"
 
 # --- OpenAI Setup ---
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # --- ElevenLabs Setup ---
-elevenlabs_client = ElevenLabs(api_key="sk_c3fda08735a26f68ab62bf5ef7c37aabb4699998df8156a6")
+elevenlabs_client = ElevenLabs(api_key=st.secrets["ELEVENLABS_API_KEY"])
 
 # --- Default Vacancy Data ---
 default_vacancy_text = """
