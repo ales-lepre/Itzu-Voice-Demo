@@ -16,8 +16,7 @@ ITZU_WHITE = "#FFFFFF"
 ITZU_LIGHT_BLUE = "#E8F4F8"
 
 # --- OpenAI Setup ---
-<<<<<<< HEAD
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # --- Custom CSS for itzu Branding ---
 st.markdown(f"""
@@ -88,9 +87,6 @@ st.markdown(f"""
     }}
 </style>
 """, unsafe_allow_html=True)
-=======
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
->>>>>>> b34087efe3af40572fca76ce9538a3db0924fd0e
 
 # --- Helper Functions ---
 def generate_transcript():
