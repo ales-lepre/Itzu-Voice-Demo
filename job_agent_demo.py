@@ -23,7 +23,7 @@ st.set_page_config(
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # --- ElevenLabs Setup ---
-elevenlabs_client = ElevenLabs(api_key=st.secrets["ELEVENLABS_API_KEY"])
+elevenlabs_client = ElevenLabs(api_key="sk_c3fda08735a26f68ab62bf5ef7c37aabb4699998df8156a6")
 
 # --- Default Vacancy Data ---
 default_vacancy_text = """
@@ -279,9 +279,19 @@ if 'processing_audio' not in st.session_state:
 if 'last_audio_hash' not in st.session_state:
     st.session_state.last_audio_hash = None
 
+if 'language' not in st.session_state:
+    st.session_state.language = 'English'
+
 # Initialize with starting message if no messages
 if not st.session_state.messages:
-    initial_text = "Hey I am an AI agent that is going to interview you. Can you introduce yourself?"
+    # Language-specific initial messages
+    initial_messages = {
+        'English': "Hey I am an AI agent that is going to interview you. Can you introduce yourself?",
+        'Dutch': "Hallo, ik ben een AI-agent die u gaat interviewen. Kunt u zich voorstellen?",
+        'French': "Bonjour, je suis un agent IA qui va vous interviewer. Pouvez-vous vous présenter ?"
+    }
+    initial_text = initial_messages.get(st.session_state.language, initial_messages['English'])
+
     # Generate audio for initial message
     audio = elevenlabs_client.text_to_speech.convert(text=initial_text, voice_id="21m00Tcm4TlvDq8ikWAM")
     audio_bytes = b''.join(audio)
@@ -292,6 +302,19 @@ if not st.session_state.messages:
 # --- Sidebar for Vacancy Input ---
 with st.sidebar:
     st.title("Job Vacancy Setup")
+
+    # Language selector
+    st.subheader("🌍 Interview Language")
+    language = st.selectbox(
+        "Select interview language:",
+        ["English", "Dutch", "French"],
+        index=["English", "Dutch", "French"].index(st.session_state.language)
+    )
+    if language != st.session_state.language:
+        st.session_state.language = language
+        st.info(f"Language changed to {language}. This will apply to new AI responses.")
+
+    st.markdown("---")
     st.write("Set up the job vacancy details for the interview.")
     option = st.selectbox("Choose vacancy input method:", ["Default text", "Type text", "Upload file"])
     
@@ -438,7 +461,8 @@ if st.session_state.conversation_mode:
                 emotion_context = f"\n\nNote: The candidate's emotional state during this response was detected as '{emotion}' with '{confidence}' confidence. Consider this in your assessment and follow-up questions."
 
                 # Prepare messages for API
-                system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
+                language_instruction = f"IMPORTANT: Conduct the entire interview in {st.session_state.language}. All your responses must be in {st.session_state.language}."
+                system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\n{language_instruction}\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
                 api_messages = [{"role": "system", "content": system_message}]
 
                 # Add conversation history
@@ -576,7 +600,8 @@ if not st.session_state.conversation_mode:
             st.session_state.current_emotion = None
 
             # Prepare messages for API
-            system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
+            language_instruction = f"IMPORTANT: Conduct the entire interview in {st.session_state.language}. All your responses must be in {st.session_state.language}."
+            system_message = f"You are an HR representative conducting an interview for the following job vacancy. Ask relevant questions to assess the candidate's fit for the role based on the vacancy details. Engage in a natural conversation and ask follow-up questions as appropriate.\n\n{language_instruction}\n\nJob Vacancy:\n{st.session_state.vacancy_text}"
 
             api_messages = [{"role": "system", "content": system_message}]
 
